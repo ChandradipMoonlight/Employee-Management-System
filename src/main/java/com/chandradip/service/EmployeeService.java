@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface EmployeeService {
     EmployeeResponse addEmployee(EmployeeRequest employeeRequest, List<AddressRequest> addressRequests);
+
+    List<EmployeeResponse> getAllEmployee();
 }

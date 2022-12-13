@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -41,5 +42,13 @@ public class EmployeeServiceImpl implements EmployeeService{
         EmployeeResponse employeeResponse = employeeBuilder.getEmployeeResponse(employee, address);
         log.info("[Employee Response] : {}",employeeResponse);
         return employeeResponse;
+    }
+
+    @Override
+    public List<EmployeeResponse> getAllEmployee() {
+        return employeeRepo.findAll()
+                 .stream()
+                .map(employeeInfo -> employeeBuilder.getEmployeeResponse(employeeInfo, employeeInfo.getAddresses()))
+                .collect(Collectors.toList());
     }
 }
