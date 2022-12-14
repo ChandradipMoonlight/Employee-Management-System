@@ -7,7 +7,9 @@ import com.chandradip.dto.EmployeeResponse;
 import java.util.List;
 
 public interface EmployeeService {
-    EmployeeResponse addEmployee(EmployeeRequest employeeRequest, List<AddressRequest> addressRequests);
+    EmployeeResponse addEmployee(EmployeeRequest employeeRequest);
 
     List<EmployeeResponse> getAllEmployee();
+
+    EmployeeResponse getEmployeeById(Integer employeeId);
 }

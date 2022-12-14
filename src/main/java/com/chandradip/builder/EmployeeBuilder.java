@@ -6,6 +6,7 @@ import com.chandradip.entity.Employee;
 import com.chandradip.enums.AddressType;
 import com.chandradip.enums.Department;
 import com.chandradip.enums.Gender;
+import com.chandradip.repo.EmployeeRepo;
 import com.chandradip.utils.AppUtils;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,11 @@ import java.util.stream.Collectors;
 
 @Component
 public class EmployeeBuilder {
+    private final EmployeeRepo employeeRepo;
+
+    public EmployeeBuilder(EmployeeRepo employeeRepo) {
+        this.employeeRepo = employeeRepo;
+    }
 
     public Employee getEmployee(EmployeeRequest employeeRequest) {
         return Employee.builder()
@@ -26,9 +32,13 @@ public class EmployeeBuilder {
                 .build();
     }
 
-    public EmployeeResponse getEmployeeResponse(Employee employee, List<Address> address) {
-        boolean isDataSaved = Optional.ofNullable(employee).isPresent() && Optional.ofNullable(address).isPresent();
+    public EmployeeResponse getEmployeeResponse(Employee employee) {
+        boolean isDataSaved = Optional.ofNullable(employee).isPresent();
         ResponseStatus responseStatus = isDataSaved ? AppUtils.getSuccessStatus() : AppUtils.getErrorStatus();
+        List<AddressResponse> addressResponseList = null;
+        if (employee.getAddresses() != null) {
+            addressResponseList = getAddressResponse(employee.getAddresses());
+        }
         return EmployeeResponse.builder()
                 .employeeId(employee.getEmpId())
                 .employeeFirstName(employee.getFirstName())
@@ -38,7 +48,7 @@ public class EmployeeBuilder {
                 .gender(Gender.valueOf(employee.getGender()))
                 .employeeCreatedDate(AppUtils.getStringFormattedDate(employee.getCreatedDate()))
                 .employeeUpdatedDate(AppUtils.getStringFormattedDate(employee.getCreatedDate()))
-                .addressResponses(getAddressResponse(address))
+                .addressResponses(addressResponseList)
                 .responseStatus(responseStatus)
                 .build();
     }
