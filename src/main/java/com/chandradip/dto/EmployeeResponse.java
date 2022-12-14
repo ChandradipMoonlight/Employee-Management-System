@@ -17,6 +17,8 @@ public class EmployeeResponse {
     private Integer employeeId;
     private String employeeFirstName;
     private String employeeLastName;
+    private String employeeMobileNumber;
+    private String employeeEmailId;
     private Integer employeeAge;
     private Gender gender;
     private Department department;

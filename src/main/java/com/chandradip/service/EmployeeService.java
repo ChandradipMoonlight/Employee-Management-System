@@ -12,4 +12,8 @@ public interface EmployeeService {
     List<EmployeeResponse> getAllEmployee();
 
     EmployeeResponse getEmployeeById(Integer employeeId);
+
+    EmployeeResponse updateEmployeeById(Integer empId, EmployeeRequest request);
+
+    Integer deleteEmployeeById(Integer empId);
 }

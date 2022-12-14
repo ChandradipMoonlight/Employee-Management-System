@@ -6,6 +6,7 @@ import com.chandradip.dto.RequestDTO;
 import com.chandradip.dto.ResponseDTO;
 import com.chandradip.enums.MessageProperties;
 import com.chandradip.service.EmployeeService;
+import io.swagger.models.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,22 @@ public class EmployeeController {
         log.info("Inside Employee Controller getEmployeeById() method, EmployeeId : {}", employeeId);
         ResponseDTO response = new ResponseDTO(MessageProperties.FETCHED_EMPLOYEE.getMessage(),
                 employeeService.getEmployeeById(employeeId));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{empId}")
+    public ResponseEntity<ResponseDTO> updateEmployeeById(@PathVariable("empId") Integer empId, @RequestBody EmployeeRequest request) {
+        log.info("Inside Employee Controller updateEmployeeById() method, EmployeeId : {empId}", empId);
+        ResponseDTO response = new ResponseDTO(MessageProperties.UPDATE_EMPLOYEE.getMessage(),
+                employeeService.updateEmployeeById(empId, request));
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/delete/{empId}")
+    public ResponseEntity<ResponseDTO> deleteEmployeeById(@PathVariable("empId") Integer empId) {
+        log.info("Inside EmployeeController deleteEmployee() method. [Employee Id] : => {}", empId);
+        ResponseDTO response = new ResponseDTO(MessageProperties.DELETE_EMPLOYEE.getMessage(),
+                employeeService.deleteEmployeeById(empId));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
