@@ -1,7 +1,5 @@
 package com.chandradip.controller;
 
-import com.chandradip.dto.AddressRequest;
-import com.chandradip.dto.EmployeeRequest;
 import com.chandradip.dto.RequestDTO;
 import com.chandradip.dto.ResponseDTO;
 import com.chandradip.service.EmployeeService;
@@ -9,12 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -35,6 +28,13 @@ public class EmployeeController {
     public ResponseEntity<ResponseDTO> getAllEmployeeDetails() {
         ResponseDTO responseDTO = new ResponseDTO("All Employee Fetched Successfully!",
                 employeeService.getAllEmployee());
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    @PutMapping("/updateEmployee/{empId}")
+    public ResponseEntity<ResponseDTO> updateEmployeeDetails(@PathVariable("empId") Integer empId, @RequestBody RequestDTO requestDTO) {
+        ResponseDTO responseDTO = new ResponseDTO("Employee Details Updated Successfully!",
+                employeeService.updateEmployeeDetails(empId, requestDTO));
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 

@@ -8,7 +8,9 @@ import lombok.Data;
 public class EmployeeRequest {
     private String employeeFirstName;
     private String employeeLastName;
-    private Integer EmployeeAge;
+    private String employeeEmailId;
+    private String employeeMobileNumber;
+    private Integer employeeAge;
     private Gender gender;
     private Department department;
 }
