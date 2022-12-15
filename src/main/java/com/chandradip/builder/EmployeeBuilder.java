@@ -16,11 +16,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class EmployeeBuilder {
-    private final EmployeeRepo employeeRepo;
-
-    public EmployeeBuilder(EmployeeRepo employeeRepo) {
-        this.employeeRepo = employeeRepo;
-    }
 
     public Employee getEmployee(EmployeeRequest employeeRequest) {
         return Employee.builder()
@@ -35,13 +30,25 @@ public class EmployeeBuilder {
     }
 
     public EmployeeResponse getEmployeeResponse(Employee employee) {
+        AddressBuilder addressBuilder = new AddressBuilder();
         boolean isDataSaved = Optional.ofNullable(employee).isPresent();
         ResponseStatus responseStatus = isDataSaved ? AppUtils.getSuccessStatus() : AppUtils.getErrorStatus();
-        List<AddressResponse> addressResponseList = null;
+        List<AddressDTO> addressDTOList = null;
         if (employee.getAddresses() != null) {
-            addressResponseList = getAddressResponse(employee.getAddresses());
+            addressDTOList = employee.getAddresses()
+                    .stream()
+                    .map(address -> addressBuilder.getAddressDTO(address))
+                    .collect(Collectors.toList());
         }
         return EmployeeResponse.builder()
+                .employeeDTO(getEmployeeDTO(employee))
+                .addressDTOS(addressDTOList)
+                .responseStatus(responseStatus)
+                .build();
+    }
+
+    public EmployeeDTO getEmployeeDTO(Employee employee) {
+        return EmployeeDTO.builder()
                 .employeeId(employee.getEmpId())
                 .employeeFirstName(employee.getFirstName())
                 .employeeLastName(employee.getLastName())
@@ -52,37 +59,6 @@ public class EmployeeBuilder {
                 .gender(Gender.valueOf(employee.getGender()))
                 .employeeCreatedDate(AppUtils.getStringFormattedDate(employee.getCreatedDate()))
                 .employeeUpdatedDate(AppUtils.getStringFormattedDate(employee.getCreatedDate()))
-                .addressResponses(addressResponseList)
-                .responseStatus(responseStatus)
                 .build();
     }
-
-    public List<AddressResponse> getAddressResponse(List<Address> address) {
-         return address.stream().map(e -> {
-            return AddressResponse.builder()
-                    .addressId(e.getAddressId())
-                    .state(e.getState())
-                    .city(e.getCity())
-                    .pinCode(e.getPinCode())
-                    .addressType(AddressType.valueOf(e.getAddressType()))
-                    .addressCreatedDate(AppUtils.getStringFormattedDate(e.getCreatedDate()))
-                    .addressUpdatedDate(AppUtils.getStringFormattedDate(e.getUpdatedDate()))
-                    .build();
-         }).collect(Collectors.toList());
-    }
-
-    public List<Address> getAddress(List<AddressRequest> addressRequests, Employee employee) {
-        return addressRequests.stream().
-                map(addressRequest -> {
-                    return Address.builder()
-                            .city(addressRequest.getCity())
-                            .state(addressRequest.getState())
-                            .addressType(addressRequest.getAddressType().name())
-                            .pinCode(addressRequest.getPinCode())
-                            .employee(employee)
-                            .build();
-                }).collect(Collectors.toList());
-    }
-
-
 }

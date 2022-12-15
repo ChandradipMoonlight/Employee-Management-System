@@ -2,14 +2,11 @@ package com.chandradip.service;
 
 import com.chandradip.builder.EmployeeBuilder;
 import com.chandradip.constant.AppConstant;
-import com.chandradip.dto.AddressRequest;
 import com.chandradip.dto.EmployeeRequest;
 import com.chandradip.dto.EmployeeResponse;
-import com.chandradip.entity.Address;
 import com.chandradip.entity.Employee;
 import com.chandradip.enums.MessageProperties;
-import com.chandradip.exception.EmployeeException;
-import com.chandradip.repo.AddressRepo;
+import com.chandradip.exception.EmployeeNotFoundException;
 import com.chandradip.repo.EmployeeRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +50,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public EmployeeResponse getEmployeeById(Integer employeeId) {
          Employee employee = employeeRepo.findById(employeeId)
-                 .orElseThrow(() -> new EmployeeException(MessageProperties.EMPLOYEE_NOT_FOUND.getMessage(),
-                         EmployeeException.ExceptionType.EMPLOYEE_NOT_FOUND, AppConstant.NOT_FOUND));
+                 .orElseThrow(() -> new EmployeeNotFoundException(MessageProperties.EMPLOYEE_NOT_FOUND.getMessage(),
+                         AppConstant.NOT_FOUND));
         return employeeBuilder.getEmployeeResponse(employee);
     }
 
@@ -63,8 +60,8 @@ public class EmployeeServiceImpl implements EmployeeService{
         log.info("Inside EmployeeService Class updateEmployeeById() method," +
                 " \n[EmployeeId] : => {},\n[EmployeeRequest] : => ", empId, employeeRequest);
         Employee employee = employeeRepo.findById(empId)
-                .orElseThrow(() -> new EmployeeException(MessageProperties.EMPLOYEE_NOT_FOUND.getMessage(),
-                        EmployeeException.ExceptionType.EMPLOYEE_NOT_FOUND, AppConstant.NOT_FOUND));
+                .orElseThrow(() -> new EmployeeNotFoundException(MessageProperties.EMPLOYEE_NOT_FOUND.getMessage(),
+                        AppConstant.NOT_FOUND));
         employee = commonService.updateEmployee(employee, employeeRequest);
         employee = employeeRepo.save(employee);
         log.info("{}.\n[updated Employee] : => {}", MessageProperties.UPDATE_EMPLOYEE.getMessage(), employee);
@@ -76,8 +73,8 @@ public class EmployeeServiceImpl implements EmployeeService{
         log.info("Inside EmployeeService Class deleteEmployeeById() method," +
                 " \n[EmployeeId] : => {}", empId);
         Employee employee = employeeRepo.findById(empId)
-                .orElseThrow(() -> new EmployeeException(MessageProperties.EMPLOYEE_NOT_FOUND.getMessage(),
-                        EmployeeException.ExceptionType.EMPLOYEE_NOT_FOUND, AppConstant.NOT_FOUND));
+                .orElseThrow(() -> new EmployeeNotFoundException(MessageProperties.EMPLOYEE_NOT_FOUND.getMessage(),
+                        AppConstant.NOT_FOUND));
         log.info("Deleted Employee : => {}", employee);
         employeeRepo.delete(employee);
         return empId;
