@@ -16,6 +16,7 @@ public enum MessageProperties {
     DELETE_ADDRESS("Address is deleted successfully!"),
     FETCHED_ADDRESS("Address Is Fetched Successfully"),
     FETCHED_ALL_ADDRESS("All Address are Fetched Successfully!"),
+    UPDATE_ADDRESS("Address updated Successfully"),
 
 
 

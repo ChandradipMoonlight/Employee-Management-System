@@ -1,6 +1,8 @@
 package com.chandradip.service;
 
+import com.chandradip.dto.AddressRequest;
 import com.chandradip.dto.EmployeeRequest;
+import com.chandradip.entity.Address;
 import com.chandradip.entity.Employee;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,5 +35,21 @@ public class CommonService {
             employee.setDepartment(employeeRequest.getDepartment().name());
         }
         return employee;
+    }
+
+    public Address updateAddress(Address address, AddressRequest addressRequest) {
+        if (addressRequest.getCity() != null) {
+            address.setCity(addressRequest.getCity());
+        }
+        if (addressRequest.getState() != null) {
+            address.setState(addressRequest.getState());
+        }
+        if (addressRequest.getPinCode() != null) {
+            address.setPinCode(addressRequest.getPinCode());
+        }
+        if (addressRequest.getAddressType() != null) {
+            address.setAddressType(addressRequest.getAddressType().name());
+        }
+        return address;
     }
 }
